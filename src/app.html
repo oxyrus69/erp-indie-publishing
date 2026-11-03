@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="id" class="h-full">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.svg" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
+		<script>
+			// Terapkan tema sebelum paint agar tidak ada flash.
+			try {
+				const stored = localStorage.getItem('erp-theme');
+				const dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+				if (dark) document.documentElement.classList.add('dark');
+			} catch {}
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover" class="h-full bg-paper text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100">
+		<div class="flex h-full flex-col">%sveltekit.body%</div>
+	</body>
+</html>

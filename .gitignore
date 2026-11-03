@@ -1,0 +1,39 @@
+# dependensi
+node_modules/
+
+# output build & cache
+build/
+.svelte-kit/
+dist/
+.next/
+.cache/
+
+# artefak coding agent & tangkapan layar
+.openchamber/
+screenshots/
+.tmp/
+.freebuff/
+.cloud-attachments/
+*.log
+.devlog.txt
+
+# file lokal / rahasia
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# cadangan & dump database lokal
+*.bak
+*.sql.bak
+backup/
+
+# unggahan lokal mode pengembangan (naskah, PDF, cover)
+.data/
+
+# sistem operasi & editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

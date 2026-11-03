@@ -1,0 +1,28 @@
+# Normalisasi akhir baris: repo menyimpan LF, checkout Windows boleh CRLF.
+* text=auto eol=lf
+
+# Berkas biner — jangan pernah diubah akhir barisnya.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+
+# SQL migrasi: perubahan akhir baris akan mengubah checksum, jangan disentuh.
+*.sql text eol=lf
+
+# Skrip shell harus LF agar tetap bisa dieksekusi di Linux/macOS.
+*.sh text eol=lf
+
+# Berkas Windows tetap CRLF.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# Jangan tampilkan diff untuk file generated.
+package-lock.json linguist-generated=true
+drizzle/meta/** linguist-generated=true

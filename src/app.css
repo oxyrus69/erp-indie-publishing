@@ -1,0 +1,314 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		color-scheme: light;
+
+		/*
+		 * Warna grafik.
+		 *
+		 * Layerchart menulis atribut SVG inline (`fill`/`stroke`), bukan kelas
+		 * Tailwind. Kelas seperti `fill-yale-500/25` tidak akan pernah ikut
+		 * ter-build karena pustaka itu bukan bagian dari `content` Tailwind.
+		 * Karena itu warnanya datang dari variabel CSS yang didefinisikan di
+		 * sini — satu tempat, ikut tema terang/gelap.
+		 */
+		--chart-line: theme('colors.yale.700');
+		--chart-line-soft: rgb(15 77 146 / 0.45);
+		--chart-fill: rgb(15 77 146 / 0.16);
+		--chart-grid: rgb(20 20 19 / 0.1);
+		--chart-tick: theme('colors.ink.500');
+	}
+	.dark {
+		color-scheme: dark;
+
+		--chart-line: theme('colors.yale.400');
+		/*
+		 * Seri kedua sengaja *bukan* versi lebih gelap dari seri pertama:
+		 * di latar gelap, warna lebih gelap menyatu dengan latar sehingga
+		 * batang "harga jual" praktis tak terlihat. Dipakai warna yang sama
+		 * dengan opasitas lebih rendah — tetap terbaca, tetap jelas urutan.
+		 */
+		--chart-line-soft: rgb(103 163 222 / 0.6);
+		--chart-fill: rgb(103 163 222 / 0.18);
+		--chart-grid: rgb(209 209 204 / 0.12);
+		--chart-tick: theme('colors.ink.400');
+	}
+
+	body {
+		-webkit-font-smoothing: antialiased;
+		text-rendering: optimizeLegibility;
+	}
+
+	::selection {
+		background-color: theme('colors.yale.700');
+		color: #ffffff;
+	}
+	.dark ::selection {
+		background-color: theme('colors.yale.600');
+		color: #ffffff;
+	}
+
+	/*
+	 * Kontrol native (checkbox/radio/range/progress) memakai Yale, bukan biru bawaan.
+	 * Plugin @tailwindcss/forms mewarnai centang lewat `currentColor`, jadi
+	 * `color` dan `--tw-ring-color` ikut ditimpa — bukan hanya accent-color.
+	 */
+	input[type='checkbox'],
+	input[type='radio'],
+	input[type='range'],
+	progress {
+		accent-color: theme('colors.yale.700');
+	}
+	input[type='checkbox'],
+	input[type='radio'] {
+		color: theme('colors.yale.700');
+		--tw-ring-color: theme('colors.yale.600');
+	}
+	.dark input[type='checkbox'],
+	.dark input[type='radio'],
+	.dark input[type='range'],
+	.dark progress {
+		accent-color: theme('colors.yale.500');
+	}
+	.dark input[type='checkbox'],
+	.dark input[type='radio'] {
+		color: theme('colors.yale.500');
+		--tw-ring-color: theme('colors.yale.400');
+		--tw-ring-offset-color: theme('colors.ink.950');
+	}
+	/* Hanya kotak kosong: state tercentang memakai fill currentColor dari plugin. */
+	.dark input[type='checkbox']:not(:checked),
+	.dark input[type='radio']:not(:checked) {
+		background-color: theme('colors.ink.900');
+		border-color: theme('colors.ink.600');
+	}
+
+	/* Kontrol native dan focus ring selalu Yale Blue, konsisten di seluruh aplikasi. */
+	:focus-visible {
+		outline-color: theme('colors.yale.600');
+	}
+	.dark :focus-visible {
+		outline-color: theme('colors.yale.400');
+	}
+}
+
+@layer components {
+	.card {
+		@apply rounded-xl border border-ink-200/80 bg-white shadow-[0_1px_2px_rgba(20,20,19,0.04)] dark:border-ink-800 dark:bg-ink-900;
+	}
+
+	.card-header {
+		@apply flex items-start justify-between gap-3 border-b border-ink-100 px-5 py-4 dark:border-ink-800;
+	}
+
+	.label {
+		@apply text-[11px] font-medium uppercase tracking-[0.08em] text-ink-400 dark:text-ink-500;
+	}
+
+	.value {
+		@apply mt-1 font-mono text-sm tabular-nums text-ink-900 dark:text-ink-100;
+	}
+
+	.btn {
+		@apply inline-flex items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition
+			focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+			disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	.btn-primary {
+		@apply btn bg-yale-700 text-white hover:bg-yale-800
+			dark:bg-yale-600 dark:text-white dark:hover:bg-yale-500;
+	}
+
+	/* Tautan teks biasa. */
+	.link {
+		@apply rounded-sm text-yale-700 underline-offset-4 hover:underline
+			focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+			dark:text-yale-300;
+	}
+
+	.btn-secondary {
+		@apply btn border border-ink-200 bg-white text-ink-700 hover:border-ink-300 hover:bg-ink-50
+			dark:border-ink-700 dark:bg-ink-900 dark:text-ink-200 dark:hover:bg-ink-800;
+	}
+
+	.btn-danger {
+		@apply btn border border-red-200 bg-red-50 text-red-700 hover:bg-red-100
+			dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-300;
+	}
+
+	.badge {
+		@apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wide;
+	}
+
+	.field {
+		@apply w-full rounded-lg border border-ink-200 bg-white px-3 py-2 text-sm text-ink-900
+			placeholder:text-ink-400 focus:border-yale-600 focus:outline-none focus:ring-2 focus:ring-yale-600/20
+			dark:border-ink-700 dark:bg-ink-950 dark:text-ink-100 dark:focus:border-yale-400 dark:focus:ring-yale-400/25;
+	}
+}
+
+/*
+ * ══════════════════════════════════════════════════════════════════════════
+ * CETAK
+ * ══════════════════════════════════════════════════════════════════════════
+ *
+ * Halaman laporan (invoice, rekap piutang, HPP) dicetak apa adanya: navigasi
+ * aplikasi, tombol, dan kontrol filter disembunyikan. Warna dipaksa gelap di
+ * atas putih supaya dokumen tetap terbaca setelah dicetak hitam-putih, dan
+ * tema gelap tidak ikut tercetak jadi latar hitam (yang menghabiskan tinta).
+ */
+@media print {
+	@page {
+		size: A4;
+		margin: 14mm 12mm;
+	}
+
+	:root,
+	.dark {
+		color-scheme: light !important;
+	}
+
+	/* Latar dan teks selalu versi terang, apa pun tema aktifnya. */
+	html,
+	body {
+		background: #fff !important;
+		color: #141413 !important;
+	}
+
+	/*
+	 * Kelas penanda: elemen interaktif dan navigasi tidak punya tempat di
+	 * kertas. `display: none` dipakai (bukan `visibility`) agar tidak
+	 * menyisakan ruang kosong.
+	 */
+	.no-print,
+	nav,
+	aside,
+	button,
+	form {
+		display: none !important;
+	}
+
+	/* Tabel laporan tetap utuh; baris tidak boleh terpotong antar halaman. */
+	table {
+		width: 100% !important;
+		border-collapse: collapse !important;
+		font-size: 10.5pt;
+	}
+	thead {
+		display: table-header-group;
+	}
+	tfoot {
+		display: table-footer-group;
+	}
+	tr {
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+	th,
+	td {
+		border-bottom: 1px solid #d1d1cc !important;
+		padding: 4pt 6pt !important;
+	}
+	th {
+		border-bottom: 1.5pt solid #47473f !important;
+		text-align: left;
+	}
+
+	/* Bayangan, radius besar, dan efek layar dibuang agar hasilnya bersih. */
+	* {
+		box-shadow: none !important;
+		text-shadow: none !important;
+		animation: none !important;
+		transition: none !important;
+	}
+	.card {
+		border: 0 !important;
+		border-radius: 0 !important;
+		background: transparent !important;
+	}
+
+	/* Tautan dicetak sebagai teks biasa, bukan biru bergaris bawah. */
+	a {
+		color: inherit !important;
+		text-decoration: none !important;
+	}
+
+	/* Angka uang tetap rata kanan dan rata digit meski font diganti printer. */
+	.tabular-nums {
+		font-variant-numeric: tabular-nums;
+	}
+
+	/* Blok yang harus mulai di halaman baru (mis. lampiran per bulan). */
+	.page-break {
+		break-before: page;
+		page-break-before: always;
+	}
+
+	.print-only {
+		display: block !important;
+	}
+}
+
+@layer components {
+	/*
+	 * Tabel dokumen (invoice, rekap, laporan) memakai garis tipis di layar
+	 * karena tanpa itu barisnya sulit diikuti. Saat dicetak, aturan di
+	 * `@media print` menimpanya dengan garis yang lebih tegas.
+	 */
+	.doc-table {
+		@apply w-full border-collapse text-xs;
+	}
+	.doc-table th {
+		@apply border-b border-ink-300 py-2 pr-3 text-left text-[10px] font-semibold uppercase tracking-[0.06em] text-ink-500 first:pl-0 last:pr-0 dark:border-ink-600 dark:text-ink-400;
+	}
+	.doc-table td {
+		@apply border-b border-ink-100 py-2.5 pr-3 align-top first:pl-0 last:pr-0 dark:border-ink-800;
+	}
+	.doc-table tbody tr:last-child td {
+		@apply border-b-0;
+	}
+	.doc-table tfoot th,
+	.doc-table tfoot td {
+		@apply border-t border-ink-300 border-b-0 pt-2.5 dark:border-ink-600;
+	}
+}
+
+/* Kebalikan dari .no-print: hanya tampil di kertas. */
+@media screen {
+	.print-only {
+		display: none !important;
+	}
+}
+
+/*
+ * Hormati preferensi sistem "kurangi gerakan".
+ *
+ * Alasan: transisi drawer, toast, dan spinner berputar bisa memicu mual atau
+ * pusing pada pengguna dengan gangguan vestibular. Saat preferensi ini aktif,
+ * semua animasi dipersingkat hampir nol — perubahan tampilan tetap terjadi,
+ * hanya tanpa pergerakan yang menyapu layar.
+ *
+ * `0.01ms` (bukan `0`) dipakai supaya event `transitionend` tetap terpicu;
+ * beberapa komponen menunggu event itu sebelum melepas status "sibuk".
+ */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	/* Spinner tetap harus terlihat berputar sesaat sebagai status, bukan hiasan. */
+	.animate-spin {
+		animation-duration: 1.5s !important;
+		animation-iteration-count: infinite !important;
+	}
+}
+
