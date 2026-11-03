@@ -220,3 +220,16 @@ Repo ini publik dan terbuka untuk siapa pun.
 5. Satu PR untuk satu hal. Jelaskan **mengapa**, bukan hanya apa.
 
 Laporkan bug lewat Issues dengan langkah reproduksi. Untuk perubahan besar, buka diskusi dulu supaya tidak ada pekerjaan yang terbuang.
+
+### Sebelum push: periksa kredensial
+
+Empat skrip audit tersedia. Semuanya **tidak pernah mencetak nilai rahasia** — hanya lokasi dan sidik jari.
+
+```bash
+node scripts/audit-secrets.mjs    # nilai .env persis di seluruh objek git
+node scripts/audit-push.mjs       # simulasi: apa yang benar-benar dikirim ke remote
+node scripts/audit-patterns.mjs   # pola kredensial umum (JWT, AWS, token, private key)
+node scripts/audit-personal.mjs   # data pribadi non-kredensial (email commit, nomor HP, rekening)
+```
+
+`audit-push.mjs` adalah yang paling ketat: ia mengumpulkan setiap blob di semua ref yang akan naik, menyusun fragmen rahasia dari `.env` (password database, project-ref Supabase, kunci Cloudinary), lalu memastikan tidak satu pun muncul.
